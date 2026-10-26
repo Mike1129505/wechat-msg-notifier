@@ -20,6 +20,7 @@
     "serverchan": "",
     "webhook": "",
     "bark_group": "微信",
+    "bark_sound": "",
     "ntfy": "",
     "email": {
       "smtp_host": "",

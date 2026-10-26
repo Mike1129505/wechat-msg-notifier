@@ -99,6 +99,81 @@ Bark App 首页会给这个 URL；也可以填 `ntfy` / `email` / `serverchan` /
 > 从**大号**或**文件传输助手**发给小号的消息默认不提醒（它们在 `exclude` 里）。
 > 想收到自己的测试消息，把对应名字从 `exclude` 删掉。
 
+### Bark（iPhone 推荐）
+
+Bark 是 iOS 上的免费推送 App，不用注册；也支持自建服务端。
+
+**1. 装 App、拿 URL**
+
+App Store 搜索「Bark」安装。打开 App 首页，会看到一条形如
+
+```
+https://api.day.app/你的Key
+```
+
+的推送地址（每台设备一个 Key），点一下即可复制。
+
+**2. 填进配置**
+
+```json
+"channels": {
+  "bark": "https://api.day.app/你的Key",
+  "bark_group": "微信",
+  "bark_sound": "",
+  "bark_ttl": 600
+}
+```
+
+> 必须填**完整 URL**（`https://api.day.app/Key`）。只填 Key 不会工作。
+
+**3. 测一条**
+
+```powershell
+.\.venv\Scripts\python.exe watch_notify.py --test
+```
+
+手机应弹出「测试推送」。收不到看下面的排查。
+
+**Bark 可调参数**
+
+| 字段 | 默认 | 作用 |
+|---|---|---|
+| `bark_group` | 微信 | 通知分组名，Bark App 里按组折叠 |
+| `bark_sound` | 空 | 通知铃声，如 `alarm`、`bell`；留空用系统默认 |
+| `bark_ttl` | 600 | Bark 服务器保留消息的秒数；`0` 表示不删除。App 本地历史仍保留（代码固定 `isArchive=1`） |
+
+**手机端建议**
+
+- 允许 Bark 通知、打开声音；把 Bark 排除在「专注模式」限制之外。
+- 隐私：iOS 设置 → 通知 → Bark → 显示预览 →「解锁时」或「永不」；
+  或把配置里的 `detail` 改成 `brief`，推送只带「谁 + 时间」。
+- Bark App 里可以给不同分组设不同铃声，`bark_group` 就是分组名。
+
+**自建 Bark 服务端**
+
+把 `channels.bark` 里的 `https://api.day.app` 换成你自己的域名，路径仍是 `/<Key>`：
+
+```json
+"bark": "https://bark.example.com/你的Key"
+```
+
+Key 在自建服务端的配置里生成。
+
+**Bark 排查**
+
+| 现象 | 检查 |
+|---|---|
+| 手机完全没反应 | URL 是否完整、Key 是否正确；iOS 通知权限；是否静音/专注模式 |
+| 日志写「推送失败（bark）」 | 电脑能否访问 `api.day.app`；代理/防火墙；Bark 服务端是否正常 |
+| 有通知但没声音 | `bark_sound` 是否填了不存在的铃声；手机静音开关 |
+| 通知里看不到内容 | `detail` 是否为 `brief`；iOS 通知预览是否被隐藏 |
+| 换手机后收不到 | 新设备 Key 不同，更新 `channels.bark` |
+
+**Bark 安全**
+
+Bark Key 等于「谁拿到都能给你推消息」。不要提交到 git
+（`.gitignore` 已排除 `notify-config.json`）；怀疑泄露时在 Bark App 里重置 Key 并更新配置。
+
 ## 验证（4 步，缺一不可）
 
 ```powershell
