@@ -1,0 +1,29 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Runtime data (never commit)
+notify.log
+notify.log.*
+forwarder.log
+forwarder.log.*
+selfcheck.log
+selfcheck.log.*
+audit.log
+heartbeat.json
+selfcheck-state.json
+audit-state.json
+audit_last.json
+audit_check_state.json
+push-history.jsonl
+state.json
+
+# Your real config with the Bark key
+notify-config.json
+
+# Build artifacts
+*.zip
+release/
+dist/

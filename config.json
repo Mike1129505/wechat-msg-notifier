@@ -1,0 +1,23 @@
+{
+  "target": "大号",
+  "poll_interval": 3.0,
+  "exclude": [
+    "文件传输助手",
+    "服务号",
+    "公众号",
+    "订阅号",
+    "微信团队",
+    "微信支付",
+    "微信运动",
+    "腾讯新闻"
+  ],
+  "startup_forward": false,
+  "max_messages_per_chat": 6,
+  "max_chats_per_cycle": 4,
+  "max_chars": 1500,
+  "dry_run": false,
+  "log_file": "forwarder.log",
+  "state_file": "state.json",
+  "settle": 0.9,
+  "max_retries": 6
+}

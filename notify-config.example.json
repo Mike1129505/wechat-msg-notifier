@@ -1,0 +1,36 @@
+{
+  "poll_interval": 1.5,
+  "exclude": [
+    "大号",
+    "文件传输助手",
+    "服务号",
+    "公众号",
+    "订阅号",
+    "微信团队",
+    "微信支付",
+    "微信运动",
+    "腾讯新闻"
+  ],
+  "only_from": [],
+  "quiet_hours": [],
+  "per_chat_cooldown": 2,
+  "log_file": "notify.log",
+  "channels": {
+    "bark": "",
+    "serverchan": "",
+    "webhook": "",
+    "bark_group": "微信",
+    "ntfy": "",
+    "email": {
+      "smtp_host": "",
+      "smtp_port": 465,
+      "user": "",
+      "password": "",
+      "to": ""
+    },
+    "bark_ttl": 600
+  },
+  "detail": "preview",
+  "require_unread": true,
+  "push_unrecognized": false
+}
