@@ -36,6 +36,7 @@ class Notifier:
         self.email = cfg.get("email") or {}
         self.group = cfg.get("bark_group") or "微信"
         self.sound = cfg.get("bark_sound") or ""
+        self.level = cfg.get("bark_level") or ""
         self.ttl = cfg.get("bark_ttl") or 0
 
     @property
@@ -83,6 +84,8 @@ class Notifier:
         base = self.bark.rstrip("/")
         url = f"{base}/{urllib.parse.quote(title, safe='')}/{urllib.parse.quote(body, safe='')}"
         q = {"group": self.group, "isArchive": "1"}
+        if self.level:
+            q["level"] = self.level
         if self.sound:
             q["sound"] = self.sound
         if self.ttl:
@@ -92,8 +95,22 @@ class Notifier:
         for attempt in range(3):
             try:
                 with urllib.request.urlopen(url, timeout=10) as resp:
-                    if resp.status == 200:
+                    raw = resp.read()
+                    if resp.status != 200:
+                        last = RuntimeError(f"HTTP {resp.status}")
+                        continue
+                    # Bark answers 200 even for some errors; require code==200 in JSON.
+                    try:
+                        data = json.loads(raw.decode("utf-8", "replace"))
+                    except ValueError:
                         return True
+                    code = int(data.get("code", 200))
+                    if code == 200:
+                        return True
+                    last = RuntimeError(f"Bark code={code} {data.get('message', '')}")
+                    log.warning("Bark 返回失败：%s", data)
+                    if code in (400, 404):
+                        break       # bad key/device: retrying won't help
             except Exception as exc:  # noqa: BLE001
                 last = exc
                 time.sleep(0.6 * (attempt + 1))

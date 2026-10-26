@@ -21,6 +21,7 @@
     "webhook": "",
     "bark_group": "微信",
     "bark_sound": "",
+    "bark_level": "timeSensitive",
     "ntfy": "",
     "email": {
       "smtp_host": "",

@@ -120,6 +120,7 @@ https://api.day.app/你的Key
   "bark": "https://api.day.app/你的Key",
   "bark_group": "微信",
   "bark_sound": "",
+  "bark_level": "timeSensitive",
   "bark_ttl": 600
 }
 ```
@@ -140,11 +141,14 @@ https://api.day.app/你的Key
 |---|---|---|
 | `bark_group` | 微信 | 通知分组名，Bark App 里按组折叠 |
 | `bark_sound` | 空 | 通知铃声，如 `alarm`、`bell`；留空用系统默认 |
+| `bark_level` | timeSensitive | iOS 通知级别：`active` 普通、`timeSensitive` 穿透专注模式、`passive` 静默。收不到提醒时保留 `timeSensitive` |
 | `bark_ttl` | 600 | Bark 服务器保留消息的秒数；`0` 表示不删除。App 本地历史仍保留（代码固定 `isArchive=1`） |
 
 **手机端建议**
 
 - 允许 Bark 通知、打开声音；把 Bark 排除在「专注模式」限制之外。
+- 如果 **Bark App 历史里有消息、但手机不弹窗**：多半是专注模式或「静音投递」，
+  `bark_level=timeSensitive` 可以穿透；仍不行再检查 iOS 通知权限。
 - 隐私：iOS 设置 → 通知 → Bark → 显示预览 →「解锁时」或「永不」；
   或把配置里的 `detail` 改成 `brief`，推送只带「谁 + 时间」。
 - Bark App 里可以给不同分组设不同铃声，`bark_group` 就是分组名。
